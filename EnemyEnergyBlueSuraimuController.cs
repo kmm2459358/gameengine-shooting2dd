@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBlueSuraimuController : MonoBehaviour
+public class EnemyEnergyBlueSuraimuController : MonoBehaviour
 {
     //弾のプレハブオブジェクト
     public GameObject GreenBulletPrefab;
     GameObject go;
+    GameObject ItemDrop;
     int j = 0;
     float teisi = 0;
     float speed = -0.08f;
     float span = 0.11f;
     float delta = 0;
-    int HP = 80;
+    public int HP = 100;
     float kakudo = 0;
     GameObject audi;
 
@@ -20,11 +19,14 @@ public class EnemyBlueSuraimuController : MonoBehaviour
     {
         teisi = 0;
 
+        this.ItemDrop = GameObject.Find("ItemDirector");
         audi = GameObject.Find("AudioSourceDirector");
     }
 
     void Update()
     {
+        var pos = this.gameObject.transform.position;
+
         //飛び出てくる
         transform.Translate(0f, speed, 0);
         this.teisi += Time.deltaTime;
@@ -59,9 +61,9 @@ public class EnemyBlueSuraimuController : MonoBehaviour
                 audi.GetComponent<AudioSourceDirector>().EnemyShot();
                 for (int i = 0; i < 4; i++)
                 {
-                    EnemyShoot(i, kakudo);
+                    EnemyShoot(i, kakudo, pos.x, pos.y);
                 }
-                kakudo += 10f;
+                kakudo -= 10f;
             }
         }
 
@@ -74,17 +76,18 @@ public class EnemyBlueSuraimuController : MonoBehaviour
         //HP管理
         if (HP <= 0)
         {
+            Debug.Log("HPアイテム");
             audi.GetComponent<AudioSourceDirector>().EnemyKO();
+            this.ItemDrop.GetComponent<ItemDropDirector>().EnergyItemDrop(pos.x, pos.y);
             Destroy(gameObject);
         }
     }
 
-    void EnemyShoot(int n, float kakudo)
+    void EnemyShoot(int n, float kakudo, float px, float py)
     {
         go = Instantiate(GreenBulletPrefab);
-        var pos = this.gameObject.transform.position;
 
-        go.transform.position = new Vector3(pos.x, pos.y, 0);
+        go.transform.position = new Vector3(px, py, 0);
 
         switch (n)
         {

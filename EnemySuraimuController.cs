@@ -17,10 +17,12 @@ public class EnemySuraimuController : MonoBehaviour
     float px = 0.0f;
     float py = -1.0f;
     public int HP = 90;
+    GameObject audi;
 
     void Start()
     {
         player = GameObject.Find("Player");
+        audi = GameObject.Find("AudioSourceDirector");
 
         teisi = 0;
     }
@@ -42,7 +44,7 @@ public class EnemySuraimuController : MonoBehaviour
         }
 
         //進みだす
-        if (this.teisi > 6f && j == 1)
+        if (this.teisi > 4f && j == 1)
         {
             speed -= 0.002f;
             if (this.teisi > 6.5f && j == 1)
@@ -54,8 +56,9 @@ public class EnemySuraimuController : MonoBehaviour
 
         //ショット
         this.delta += Time.deltaTime;
-        if (this.delta > span && speed < 6f){
+        if (this.delta > span && teisi < 4f){
             this.delta = 0;
+            audi.GetComponent<AudioSourceDirector>().EnemyShot();
             for (int i = 0; i < 3; i++)
             {
                 EnemyShoot(i);
@@ -122,6 +125,10 @@ public class EnemySuraimuController : MonoBehaviour
         if (collision.gameObject.tag == "PlayerBullet")
         {
             HP -= 1;
+        }
+        if (collision.gameObject.tag == "Ult")
+        {
+            HP -= 100;
         }
     }
 

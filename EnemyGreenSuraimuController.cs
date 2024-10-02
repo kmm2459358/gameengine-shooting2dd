@@ -11,10 +11,13 @@ public class EnemyGreenSuraimuController : MonoBehaviour
     float delta = 0;
     int HP = 45;
     float kakudo;
+    GameObject audi;
 
     void Start()
     {
         kakudo = Random.Range(0, 301) / 10;
+
+        audi = GameObject.Find("AudioSourceDirector");
     }
 
     void Update()
@@ -33,6 +36,7 @@ public class EnemyGreenSuraimuController : MonoBehaviour
         if (this.delta > span)
         {
             this.delta = 0;
+            audi.GetComponent<AudioSourceDirector>().EnemyShot();
             for (int i = 0; i < 12; i++)
             {
                 EnemyShoot(i);
@@ -42,6 +46,7 @@ public class EnemyGreenSuraimuController : MonoBehaviour
         //HPŠÇ—
         if (HP <= 0)
         {
+            audi.GetComponent<AudioSourceDirector>().EnemyKO();
             Destroy(gameObject);
         }
     }
@@ -123,6 +128,10 @@ public class EnemyGreenSuraimuController : MonoBehaviour
         if (collision.gameObject.tag == "PlayerBullet")
         {
             HP -= 1;
+        }
+        if (collision.gameObject.tag == "Ult")
+        {
+            HP -= 100;
         }
     }
 

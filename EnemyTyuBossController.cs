@@ -2,22 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyPurpleSuraimuController : MonoBehaviour
+public class EnemyTyuBossController : MonoBehaviour
 {
     //プレイヤーオブジェクト
     GameObject player;
     //弾のプレハブオブジェクト
-    public GameObject RedBulletPrefab;
+    public GameObject BigBulletPrefab;
     GameObject go;
+    GameObject ItemDrop;
     int j = 0;
-    int shot = 0;
     float teisi = 0;
-    float speed = -0.08f;
-    float span = 1.6f;
+    float speed = -0.1f;
+    float span = 2.5f;
     float delta = 0;
     float px = 0.0f;
     float py = -1.0f;
-    int HP = 50;
     GameObject audi;
 
     void Start()
@@ -25,11 +24,15 @@ public class EnemyPurpleSuraimuController : MonoBehaviour
         player = GameObject.Find("Player");
         audi = GameObject.Find("AudioSourceDirector");
 
+        this.ItemDrop = GameObject.Find("ItemDirector");
+
         teisi = 0;
     }
 
     void Update()
     {
+        var pos = this.gameObject.transform.position;
+
         //飛び出てくる
         transform.Translate(0f, speed, 0);
         this.teisi += Time.deltaTime;
@@ -44,24 +47,13 @@ public class EnemyPurpleSuraimuController : MonoBehaviour
             }
         }
 
-        //進みだす
-        if (this.teisi > 0.6f && j == 1)
-        {
-            speed -= 0.004f;
-            if (this.teisi > 1.1f && j == 1)
-            {
-                j++;
-                teisi = 0;
-            }
-        }
-
         //ショット
         this.delta += Time.deltaTime;
-        if (this.delta > span && shot == 0)
+        if (this.delta > span && speed < 1f)
         {
-            shot++;
+            this.delta = 0;
             audi.GetComponent<AudioSourceDirector>().EnemyShot();
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 4; i++)
             {
                 EnemyShoot(i);
             }
@@ -74,18 +66,20 @@ public class EnemyPurpleSuraimuController : MonoBehaviour
         }
 
         //HP管理
-        if (HP <= 0)
+        if (GetComponent<TyuBossHPGaugeController>().TyuBossHp <= 0f)
         {
-            audi.GetComponent<AudioSourceDirector>().EnemyKO();
+            this.ItemDrop.GetComponent<ItemDropDirector>().HPItemDrop(pos.x - 0.5f, pos.y);
+            this.ItemDrop.GetComponent<ItemDropDirector>().HPItemDrop(pos.x + 0.5f, pos.y);
             Destroy(gameObject);
         }
     }
 
     void EnemyShoot(int n)
     {
-        go = Instantiate(RedBulletPrefab);
+        go = Instantiate(BigBulletPrefab);
         var pos = this.gameObject.transform.position;
         var posP = player.transform.position;
+        posP.y -= 0.28f;
         if (posP.x > 2.1954f)
         {
             posP.x = 2.1954f;
@@ -102,8 +96,8 @@ public class EnemyPurpleSuraimuController : MonoBehaviour
         {
             posP.y = -3f;
         }
-        posP.y -= 0.28f;
-
+        //Debug.Log("x" + posP.x);
+        //Debug.Log("y" + posP.y);
         px = posP.x - pos.x;
         py = posP.y - pos.y;
 
@@ -121,42 +115,29 @@ public class EnemyPurpleSuraimuController : MonoBehaviour
 
         float sin = px / (pxx + pyy);
         float cos = py / (pxx + pyy);
+        //Debug.Log("px" + px);
+        //Debug.Log("py" + py);
 
         go.transform.position = new Vector3(pos.x, pos.y, 0);
 
-        go.GetComponent<BulletZikinerauController>().sin = sin;
-        go.GetComponent<BulletZikinerauController>().cos = cos;
+        go.GetComponent<BulletTyuBossBigController>().sin = sin;
+        go.GetComponent<BulletTyuBossBigController>().cos = cos;
 
         switch (n)
         {
             case 1:
                 {
-                    go.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 3.0f);
+                    go.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
                     break;
                 }
             case 2:
                 {
-                    go.transform.rotation = Quaternion.Euler(0.0f, 0.0f, -3.0f);
+                    go.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 180.0f);
                     break;
                 }
             case 3:
                 {
-                    go.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 6.0f);
-                    break;
-                }
-            case 4:
-                {
-                    go.transform.rotation = Quaternion.Euler(0.0f, 0.0f, -6.0f);
-                    break;
-                }
-            case 5:
-                {
-                    go.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 9.0f);
-                    break;
-                }
-            case 6:
-                {
-                    go.transform.rotation = Quaternion.Euler(0.0f, 0.0f, -9.0f);
+                    go.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 270.0f);
                     break;
                 }
         }
@@ -166,11 +147,11 @@ public class EnemyPurpleSuraimuController : MonoBehaviour
     {
         if (collision.gameObject.tag == "PlayerBullet")
         {
-            HP -= 1;
+            GetComponent<TyuBossHPGaugeController>().TyuBossHp -= 1f;
         }
         if (collision.gameObject.tag == "Ult")
         {
-            HP -= 100;
+            GetComponent<TyuBossHPGaugeController>().TyuBossHp -= 20;
         }
     }
 

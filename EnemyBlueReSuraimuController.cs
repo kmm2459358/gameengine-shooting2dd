@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBlueSuraimuController : MonoBehaviour
+public class EnemyBlueReSuraimuController : MonoBehaviour
 {
     //弾のプレハブオブジェクト
     public GameObject GreenBulletPrefab;
@@ -61,7 +61,7 @@ public class EnemyBlueSuraimuController : MonoBehaviour
                 {
                     EnemyShoot(i, kakudo);
                 }
-                kakudo += 10f;
+                kakudo -= 10f;
             }
         }
 

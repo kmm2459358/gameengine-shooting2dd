@@ -8,10 +8,12 @@ public class HPDirector : MonoBehaviour
     GameObject hpGauge;
     float MaxHp = 10f;
     public float PlayerHp;
+    GameObject audi;
 
     void Start()
     {
         this.hpGauge = GameObject.Find("PlayerHP");
+        audi = GameObject.Find("AudioSourceDirector");
     }
 
     void Update()
@@ -26,6 +28,7 @@ public class HPDirector : MonoBehaviour
             if (PlayerHp < 10)
             {
                 Debug.Log("‰ñ•œ");
+                audi.GetComponent<AudioSourceDirector>().PlayerHP();
                 PlayerHp += 1f;
             }
         }

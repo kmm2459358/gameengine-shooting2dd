@@ -10,6 +10,12 @@ public class EnemyRedSraimuController : MonoBehaviour
     float span = 0.3f;
     float delta = 0;
     public int HP = 7;
+    GameObject audi;
+
+    void Start()
+    {
+        audi = GameObject.Find("AudioSourceDirector");
+    }
 
     void Update()
     {
@@ -27,13 +33,15 @@ public class EnemyRedSraimuController : MonoBehaviour
         if (this.delta > span)
         {
             this.delta = 0;
-            
+            audi.GetComponent<AudioSourceDirector>().EnemyShot();
+
             EnemyShoot();
         }
 
         //HPä«óù
         if (HP <= 0)
         {
+            audi.GetComponent<AudioSourceDirector>().EnemyKO();
             Destroy(gameObject);
         }
     }
@@ -52,6 +60,10 @@ public class EnemyRedSraimuController : MonoBehaviour
         if (collision.gameObject.tag == "PlayerBullet")
         {
             HP -= 1;
+        }
+        if (collision.gameObject.tag == "Ult")
+        {
+            HP -= 100;
         }
     }
 }

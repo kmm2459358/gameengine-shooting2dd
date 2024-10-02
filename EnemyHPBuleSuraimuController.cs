@@ -13,14 +13,16 @@ public class EnemyHPBuleSuraimuController : MonoBehaviour
     float speed = -0.08f;
     float span = 0.11f;
     float delta = 0;
-    public int HP = 80;
+    public int HP = 100;
     float kakudo = 0;
+    GameObject audi;
 
     void Start()
     {
         teisi = 0;
 
         this.ItemDrop = GameObject.Find("ItemDirector");
+        audi = GameObject.Find("AudioSourceDirector");
     }
 
     void Update()
@@ -33,7 +35,6 @@ public class EnemyHPBuleSuraimuController : MonoBehaviour
         if (this.teisi > 0.6f && j == 0)
         {
             speed += 0.003f;
-            Debug.Log("teisi");
             if (this.teisi > 1.05f && j == 0)
             {
                 j++;
@@ -46,7 +47,6 @@ public class EnemyHPBuleSuraimuController : MonoBehaviour
         if (this.teisi > 6f && j == 1)
         {
             speed -= 0.002f;
-            Debug.Log("bye");
             if (this.teisi > 6.5f && j == 1)
             {
                 j++;
@@ -60,6 +60,7 @@ public class EnemyHPBuleSuraimuController : MonoBehaviour
             if (this.delta > span)
             {
                 this.delta = 0;
+                audi.GetComponent<AudioSourceDirector>().EnemyShot();
                 for (int i = 0; i < 4; i++)
                 {
                     EnemyShoot(i, kakudo, pos.x, pos.y);
@@ -78,6 +79,7 @@ public class EnemyHPBuleSuraimuController : MonoBehaviour
         if (HP <= 0)
         {
             Debug.Log("HPƒAƒCƒeƒ€");
+            audi.GetComponent<AudioSourceDirector>().EnemyKO();
             this.ItemDrop.GetComponent<ItemDropDirector>().HPItemDrop(pos.x, pos.y);
             Destroy(gameObject);
         }
@@ -119,6 +121,10 @@ public class EnemyHPBuleSuraimuController : MonoBehaviour
         if (collision.gameObject.tag == "PlayerBullet")
         {
             HP -= 1;
+        }
+        if (collision.gameObject.tag == "Ult")
+        {
+            HP -= 100;
         }
     }
 

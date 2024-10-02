@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags:
   - BackGround
   - Bullet
@@ -10,6 +10,8 @@ TagManager:
   - PlayerBullet
   - HPItem
   - Barrier
+  - EnergyItem
+  - Ult
   layers:
   - Default
   - TransparentFX
@@ -44,9 +46,14 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: back
+    uniqueID: 3603441883
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: player
     uniqueID: 4239330777
     locked: 0
+  m_RenderingLayers:
+  - Default

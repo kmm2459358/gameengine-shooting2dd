@@ -5,6 +5,7 @@ using UnityEngine;
 public class ItemDropDirector : MonoBehaviour
 {
     public GameObject HPItemPrefab;
+    public GameObject EnergyItemPrefab;
     void Start()
     {
         
@@ -18,5 +19,10 @@ public class ItemDropDirector : MonoBehaviour
     public void HPItemDrop(float px, float py)
     {
         Instantiate(HPItemPrefab).transform.position = new Vector3(px, py, 0);
+    }
+
+    public void EnergyItemDrop(float px, float py)
+    {
+        Instantiate(EnergyItemPrefab).transform.position = new Vector3(px, py, 0);
     }
 }

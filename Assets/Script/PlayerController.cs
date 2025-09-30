@@ -133,17 +133,17 @@ public class PlayerController : MonoBehaviour
         go = Instantiate(PlayerBulletPrefab);
         var pos = this.gameObject.transform.position;
 
-        if (pos.x > 2.1954f) 
+        if (pos.x > 2.4f) 
         {
-            pos.x = 2.1954f;
+            pos.x = 2.4f;
         }
-        if (pos.x < -2.1954f)
+        if (pos.x < -2.4f)
         {
-            pos.x = -2.1954f;
+            pos.x = -2.4f;
         }
-        if (pos.y > 4.6664f)
+        if (pos.y > 4.5f)
         {
-            pos.y = 4.6664f;
+            pos.y = 4.5f;
         }
         if (pos.y < -3f)
         {
